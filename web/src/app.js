@@ -48,35 +48,11 @@ $(document).ready(function() {
         web3.eth.defaultAccount = address;
 
         if (!web3.eth.getBalance(address).toNumber()) {
-            faucet.gift(address).done(function() {
+            faucet(address).done(function() {
                 console.log('gifted: ')
                 console.log(arguments);
-            })
-            var tx = new Tx({
-                from: FAUCET_ADDRESS,
-                to: address,
-                value: ONE_FINEY,
-                nonce: '0x00',
-                
-                gasPrice: '0x09184e72a000',
-                gasLimit: '0x2710'
-            });
-
-            tx.sign(new Buffer(web3.sha3('xxx').replace('0x', ''), 'hex'));
-
-            web3.eth.sendRawTransaction(tx.serialize().toString('hex'), function(err, txHash) {
-                var blockFilter = web3.eth.filter('latest');
-                blockFilter.watch(function() {
-                    console.log(arguments);
-                    /*                    web3.eth.getTransactionReceipt(txHash, function(err, receipt) {
-                                            if (err) return console.error(err);
-                                            if (receipt) {
-                                                blockFilter.stopWatching();
-                                                console.log(receipt);
-                                            }
-                                        });
-                    */
-                });
+            }).fail(function() {
+                console.log(arguments);
             });
         }
 
